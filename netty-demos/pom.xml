@@ -11,6 +11,7 @@
 
     <modules>
         <module>netty-http</module>
+        <module>netty-rpc</module>
     </modules>
 
     <properties>
