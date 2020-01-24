@@ -12,6 +12,7 @@
     <modules>
         <module>netty-http</module>
         <module>netty-rpc</module>
+        <module>netty-sample</module>
     </modules>
 
     <properties>
