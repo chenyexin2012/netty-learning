@@ -1,0 +1,17 @@
+.settings
+bin
+classes/
+/build
+target/
+.classpath
+.project
+
+# IDEA artifacts and output dirs
+*.iml
+*.ipr
+*.iws
+.idea
+out
+test-output
+atlassian-ide-plugin.xml
+.gradletasknamecache
