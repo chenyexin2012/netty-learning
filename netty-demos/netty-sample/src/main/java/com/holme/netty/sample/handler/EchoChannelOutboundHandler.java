@@ -15,57 +15,65 @@ public class EchoChannelOutboundHandler implements ChannelOutboundHandler {
 
     @Override
     public void bind(ChannelHandlerContext ctx, SocketAddress localAddress, ChannelPromise promise) throws Exception {
-        log.info("bind, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> bind, channel: {}", ctx.channel());
+        ctx.bind(localAddress, promise);
     }
 
     @Override
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress,
                         SocketAddress localAddress, ChannelPromise promise) throws Exception {
-        log.info("connect, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> connect, channel: {}", ctx.channel());
+        ctx.connect(remoteAddress, localAddress, promise);
     }
 
     @Override
     public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        log.info("disconnect, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> disconnect, channel: {}", ctx.channel());
+        ctx.disconnect(promise);
     }
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        log.info("close, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> close, channel: {}", ctx.channel());
+        ctx.close(promise);
     }
 
     @Override
     public void deregister(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        log.info("deregister, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> deregister, channel: {}", ctx.channel());
+        ctx.deregister(promise);
     }
 
     @Override
     public void read(ChannelHandlerContext ctx) throws Exception {
-        log.info("read, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> read, channel: {}", ctx.channel());
+        ctx.read();
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        log.info("write, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> write, channel: {}", ctx.channel());
+        ctx.write(msg, promise);
     }
 
     @Override
     public void flush(ChannelHandlerContext ctx) throws Exception {
-        log.info("flush, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> flush, channel: {}", ctx.channel());
+        ctx.flush();
     }
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        log.info("handlerAdded, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> handlerAdded, channel: {}", ctx.channel());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        log.info("handlerRemoved, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> handlerRemoved, channel: {}", ctx.channel());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("exceptionCaught, channel: " + ctx.channel(), cause);
+        log.error(">>>>>>>>>>>>>>>>> exceptionCaught, channel: " + ctx.channel(), cause);
     }
 }

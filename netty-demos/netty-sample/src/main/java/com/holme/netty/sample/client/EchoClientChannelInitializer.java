@@ -13,5 +13,6 @@ public class EchoClientChannelInitializer extends ChannelInitializer<SocketChann
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(new EchoChannelInboundHandler());
         pipeline.addLast(new EchoClientSimpleChannelInboundHandler());
+        pipeline.addLast(new EchoChannelOutboundHandler());
     }
 }

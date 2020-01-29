@@ -12,16 +12,16 @@ public class EchoClientSimpleChannelInboundHandler extends SimpleChannelInboundH
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        log.info("channelActive, channel: {}", ctx.channel());
+        log.info(">>>>>>>>>>>>>>>>> channelActive, channel: {}", ctx.channel());
         ByteBuf byteBuf = Unpooled.wrappedBuffer("Hello Server".getBytes());
         ctx.channel().writeAndFlush(byteBuf);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        log.info("read message from {}", ctx.channel().remoteAddress());
+        log.info(">>>>>>>>>>>>>>>>> read message from {}", ctx.channel().remoteAddress());
         byte[] bytes = new byte[msg.readableBytes()];
         msg.readBytes(bytes);
-        log.info("message: {}", new String(bytes));
+        log.info(">>>>>>>>>>>>>>>>> message: {}", new String(bytes));
     }
 }
