@@ -17,11 +17,12 @@ public class ClientResponseHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
+        String message = "Hello World";
         FullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "netty/test");
         request.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
-        byte[] bytes = "Hello".getBytes();
+        byte[] bytes = message.getBytes();
         request.headers().set(HttpHeaderNames.CONTENT_LENGTH, bytes.length);
-        request.content().writeBytes("Hello".getBytes());
+        request.content().writeBytes(bytes);
         ctx.channel().writeAndFlush(request);
     }
 
@@ -36,7 +37,7 @@ public class ClientResponseHandler extends SimpleChannelInboundHandler<Object> {
             Iterator<Map.Entry<String, String>> entryIterator = headers.iteratorAsString();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, String> entry = entryIterator.next();
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+                log.info(entry.getKey() + ": " + entry.getValue());
             }
             ByteBuf buf = response.content();
             log.info("massage content: {}", buf.toString(CharsetUtil.UTF_8));
