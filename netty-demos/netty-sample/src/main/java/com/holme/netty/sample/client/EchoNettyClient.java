@@ -3,6 +3,7 @@ package com.holme.netty.sample.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -44,19 +45,19 @@ public class EchoNettyClient {
     }
 
     private void connect() {
-        try {
-            ChannelFuture future = this.bootstrap.connect(this.host, this.port).sync();
-            if (future.isSuccess()) {
-                log.info("success to connect to server");
-                this.channel = channel;
-            } else {
-                log.info("connect failed, waiting for reconnect");
-                TimeUnit.SECONDS.sleep(1);
-                connect();
+        this.bootstrap.connect(this.host, this.port).addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (future.isSuccess()) {
+                    log.info("success to connect to server");
+                    EchoNettyClient.this.channel = future.channel();
+                } else {
+                    log.info("connect failed, waiting for reconnect");
+                    TimeUnit.SECONDS.sleep(3);
+                    EchoNettyClient.this.connect();
+                }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     public boolean isActive() {
