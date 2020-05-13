@@ -64,7 +64,7 @@ public class NettyHttpClient {
     public void connect() {
 
         try {
-            ChannelFuture future = bootstrap.connect(new InetSocketAddress(this.host, this.port)).sync();
+            ChannelFuture future = bootstrap.connect(new InetSocketAddress(this.host, this.port)).await();
             if (future.isSuccess()) {
                 this.channel = future.channel();
                 log.info("success to connect");

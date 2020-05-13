@@ -45,3 +45,92 @@ ChannelOutboundHandler是ChannelHandler的一个子接口，用于处理出站�
 - write: 当请求通过Channel将数据写到远程节点时被调用，调用此方法时需要考虑是否发生内存泄露(例如在处理write操作时丢弃了一个消息，此时需要手动释放它)
 
 - flush: 当请求通过Channel将数据冲刷至远程节点时被调用
+
+## 知识点
+
+### await和sync
+
+netty本质上是异步的，但是可以通过await和sync来实现同步调用。以下列代码为例：
+
+    public void connect() {
+    
+        try {
+            ChannelFuture future = bootstrap.connect(new InetSocketAddress(this.host, this.port)).await();
+            if (future.isSuccess()) {
+                this.channel = future.channel();
+                log.info("success to connect");
+                this.retries = 3;
+            } else {
+                log.info("failed to connect");
+                if(this.retries-- > 0) {
+                    connect();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+这段代码的目的是实现客户端连接失败重试，connect方法返回的是一个ChannelFuture对象，此处使用await方法来实现类似同步调用。
+此处的调用链是DefaultChannelPromise.await()->DefaultPromise.await()，源码如下：
+    
+    public Promise<V> await() throws InterruptedException {
+        if (isDone()) {
+            return this;
+        }
+
+        if (Thread.interrupted()) {
+            throw new InterruptedException(toString());
+        }
+
+        checkDeadLock();
+
+        synchronized (this) {
+            while (!isDone()) {
+                incWaiters();
+                try {
+                    wait();
+                } finally {
+                    decWaiters();
+                }
+            }
+        }
+        return this;
+    }
+
+
+如何使用sync()来实现同步调用，当连接失败发生异常时，会重新抛出异常，而不会继续执行重连过程，DefaultPromise中sync方法源码如下：
+
+    public Promise<V> sync() throws InterruptedException {
+        await();
+        rethrowIfFailed();
+        return this;
+    }
+
+Netty声明，不要在IO线程中调用sync()、await()等相关阻塞的方法，这可能会带来死锁问题。可以使用addListener方法添加监听器这种异步的方式来解决。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -25,7 +25,7 @@ public class EchoNettyClient {
     private Channel channel;
 
     public EchoNettyClient() {
-        this("127.0.0.1", 8080);
+        this("127.0.0.1", 9999);
     }
 
     public EchoNettyClient(String host, int port) {
