@@ -1,10 +1,11 @@
 package com.holmes.rpc.netty;
 
+import com.holmes.rpc.netty.codec.MessageDecoder;
+import com.holmes.rpc.netty.codec.MessageEncoder;
+import com.holmes.rpc.serialize.ISerializable;
+import com.holmes.rpc.serialize.JdkSerializable;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -17,6 +18,8 @@ public class NettyServer {
 
     private final static int DEFAULT_THREADS = Runtime.getRuntime().availableProcessors() * 2;
     private final static int DEFAULT_RETRY_TIMES = 3;
+
+    private ISerializable serializable = new JdkSerializable();
 
     private int retryTimes = 0;
 
@@ -45,7 +48,10 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-
+                        ChannelPipeline pipeline = ch.pipeline();
+                        pipeline.addLast(new MessageDecoder(serializable));
+                        pipeline.addLast(new MessageEncoder(serializable));
+                        pipeline.addLast(new InvokeMessageHandler());
                     }
                 });
         doBind();

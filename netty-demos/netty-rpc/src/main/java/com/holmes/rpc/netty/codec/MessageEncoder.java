@@ -1,6 +1,5 @@
 package com.holmes.rpc.netty.codec;
 
-import com.holmes.rpc.ResultMessage;
 import com.holmes.rpc.serialize.ISerializable;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

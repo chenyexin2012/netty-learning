@@ -23,7 +23,7 @@ public class DefaultRpcFuture<T> extends CompletableFuture<T> {
         FUTURE_MAP.put(requestId, future);
     }
 
-    public static void getRpcFuture(int requestId) {
-        FUTURE_MAP.get(requestId);
+    public static DefaultRpcFuture getRpcFuture(int requestId) {
+        return FUTURE_MAP.get(requestId);
     }
 }
